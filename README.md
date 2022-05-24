@@ -20,8 +20,8 @@ Activte the `curation_v2` environment, this contains the path locations of vario
 
 This requires the use of a GRIT specific instalation of nextflow.
 
-__AS OF 20@24-05-2022 INPUT PARAMS ARE HARDCODED, THESE WILL BE MOvED TO A TEST FILE.__
+The below will run the small_test profile which runs default data.
 
 ```
-bsub -e error -o out -n 6 -q normal -M 1500 -R'select[mem>1500] rusage[mem=1500] span[hosts=1]' '/software/grit/bin/nextflow_grit run main.nf -entry top_tail'
+bsub -e error -o out -n 6 -q normal -M1500 -R'select[mem>1500] rusage[mem=1500] span[hosts=1]' '/software/grit/bin/nextflow_grit run main.nf -entry top_tail -c nextflow.conf -profile small_test'
 ```
