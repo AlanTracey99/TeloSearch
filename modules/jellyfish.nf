@@ -1,7 +1,5 @@
 process jellyfish {
 	cpus 1
-	queue 'small'
-	executor 'lsf'
 
 	input:
 	tuple val(kmer), path(scaff)
