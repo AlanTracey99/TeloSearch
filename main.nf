@@ -3,13 +3,6 @@ nextflow.enable.dsl=2
 include { split_ends } from "./modules/split_ends.nf"
 include { jellyfish } from "./modules/jellyfish.nf"
 
-params.save_dir = ""
-params.tolid = ""
-params.fasta = "/nfs/team135/alt/curation/telo/nf/test.fa"
-params.ends=100
-params.klo=4
-params.khi=6
-
 kmers = params.klo..params.khi
 
 log.info """\
