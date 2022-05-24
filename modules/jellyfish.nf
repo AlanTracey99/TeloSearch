@@ -1,6 +1,6 @@
 process jellyfish {
-	cpus 16
-	queue 'normal'
+	cpus 1
+	queue 'small'
 	executor 'lsf'
 
 	input:

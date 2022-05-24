@@ -1,6 +1,6 @@
 process split_ends {
 	cpus 1
-	queue 'normal'
+	queue 'small'
 	executor 'lsf'
     
 	input:
