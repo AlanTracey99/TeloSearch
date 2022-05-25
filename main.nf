@@ -2,7 +2,7 @@ nextflow.enable.dsl=2
 
 include { split_ends } from "./modules/split_ends.nf"
 include { jellycount } from "./modules/jellycount.nf"
-//include { jellydump } from "./modules/jellydump.nf"
+include { jellydump } from "./modules/jellydump.nf"
 
 kmers = params.klo..params.khi
 
@@ -33,7 +33,17 @@ workflow top_tail {
     // JELLYFISH FOR KMER COUNTING ON SCAFF ENDS
     //
     jellycount ( kmer_ch )
+    jellycount.out.jf_ch.collect().view()
 
-    jellycount.out.jf_files.collect().view()
+
+    
+    //
+    // JELLYFISH DUMP TO GET THE COUNTS
+    //
+    // dsl2 allows a channel to be used more than once
+    jf_counts = jellycount.out.jf_ch	// get output from jfish count channel
+    jellydump ( jf_counts )
+    jellydump.out.jf_final_out.collect().view()
+     
 
 }
