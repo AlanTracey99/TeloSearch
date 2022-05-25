@@ -1,7 +1,7 @@
 nextflow.enable.dsl=2
 
 include { split_ends } from "./modules/split_ends.nf"
-include { jellyfish } from "./modules/jellyfish.nf"
+include { jellycount } from "./modules/jellycount.nf"
 
 params.save_dir = ""
 params.tolid = ""
@@ -38,8 +38,8 @@ workflow top_tail {
     //
     // JELLYFISH FOR KMER COUNTING ON SCAFF ENDS
     //
-    jellyfish ( kmer_ch )
+    jellycount ( kmer_ch )
 
-    jellyfish.out.jf_files.collect().view()
+    jellycount.out.jf_count_files.collect().view()
 
 }
