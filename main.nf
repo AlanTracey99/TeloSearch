@@ -1,7 +1,8 @@
 nextflow.enable.dsl=2
 
 include { split_ends } from "./modules/split_ends.nf"
-include { jellyfish } from "./modules/jellycount.nf"
+include { jellycount } from "./modules/jellycount.nf"
+include { jellydump } from "./modules/jellydump.nf"
 
 kmers = params.klo..params.khi
 
