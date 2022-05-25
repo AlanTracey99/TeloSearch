@@ -3,6 +3,7 @@ nextflow.enable.dsl=2
 include { split_ends } from "./modules/split_ends.nf"
 include { jellycount } from "./modules/jellycount.nf"
 include { jellydump } from "./modules/jellydump.nf"
+include { cat_all } from "./modules/cat.nf"
 
 kmers = params.klo..params.khi
 
@@ -10,9 +11,10 @@ log.info """\
 	T E L O - N F   P I P E L I N E    
 	================================
 
-	fasta: ${params.fasta}
-	ends:  ${params.ends}
-	kmers:  ${kmers}
+	fasta:      ${params.fasta}
+	ends:       ${params.ends}
+	kmers:      ${kmers}
+    publishDir: ${param.save_dir}
 	Top and tailing input fasta...
 	"""
 
@@ -44,6 +46,7 @@ workflow top_tail {
     jf_counts = jellycount.out.jf_ch	// get output from jfish count channel
     jellydump ( jf_counts )
     jellydump.out.jf_final_out.collect().view()
-     
+    
+    cat_all ( jellydump.out.jf_final_out.collect())
 
 }
