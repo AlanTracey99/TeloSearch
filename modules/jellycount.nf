@@ -5,7 +5,7 @@ process jellycount {
 	tuple val(kmer), path(scaff)
     
 	output:
-	path("$kmer.${scaff.baseName}.jf"), emit: jf_files
+	path("$kmer.${scaff.baseName}.jf"), emit: jf_ch
 
     """
     echo $scaff
