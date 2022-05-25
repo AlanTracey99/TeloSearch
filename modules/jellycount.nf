@@ -1,4 +1,4 @@
-process jellyfish {
+process jellycount {
 	cpus 1
 
 	input:

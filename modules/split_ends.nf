@@ -10,6 +10,6 @@ process split_ends {
 	
 	script:
     """
-    python /nfs/team135/alt/curation/telo/nf/split_ends.py $fasta --size $ends
+    python $baseDir/split_ends.py $fasta --size $ends
     """
 }
