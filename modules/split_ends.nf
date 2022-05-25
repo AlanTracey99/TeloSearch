@@ -1,7 +1,5 @@
 process split_ends {
 	cpus 1
-	queue 'small'
-	executor 'lsf'
     
 	input:
 	path(fasta)
