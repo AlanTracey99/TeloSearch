@@ -33,6 +33,6 @@ workflow top_tail {
     //
     jellycount ( kmer_ch )
 
-    jellyfish.out.jf_files.collect().view()
+    jellycount.out.jf_files.collect().view()
 
 }
