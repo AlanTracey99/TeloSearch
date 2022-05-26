@@ -279,7 +279,7 @@ def process_counts(infile):
 	for k,v in lines.items():
 		khits=v[0]
 		kends=v[1]
-		if khits >5 and kends >2:   #Need to increase these to 5 and 2 after testing
+		if khits >5 and kends >2:   
 			final[k]=v
 
 

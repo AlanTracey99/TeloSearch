@@ -48,8 +48,8 @@ def location(f):
 	
 def top_and_tail(fastafile, size):
 
-	pyfastaq.utils.syscall("rm -rf ends.fa")
-	with open("ends.fa", 'w') as fout:
+	pyfastaq.utils.syscall("rm -rf ends.fasta")
+	with open("ends.fasta", 'w') as fout:
 		for seq_record in SeqIO.parse(fastafile, "fasta"):
 			scflen=len(seq_record.seq)
 			s=int(size)+1
@@ -140,7 +140,7 @@ def main():
 	#Writes fasta file of just ends (ends.fa) from input fasta file (args.fasta)
 	top_and_tail(fasta, args.size)
 	
-	fasta=location("ends.fa")
+	fasta=location("ends.fasta")
 	
 	if args.ends:
 		ends=int(int(args.ends)/2)
