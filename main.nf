@@ -4,10 +4,7 @@ include { split_ends } from "./modules/split_ends.nf"
 include { jellycount } from "./modules/jellycount.nf"
 include { jellydump } from "./modules/jellydump.nf"
 include { cat_all } from "./modules/cat.nf"
-<<<<<<< HEAD
 include { results } from "./modules/results.nf"
-=======
->>>>>>> 4d0b6728e68cc7b7878aa54f982da911fc0e2c14
 
 kmers = params.klo..params.khi
 
@@ -15,17 +12,10 @@ log.info """\
 	T E L O - N F   P I P E L I N E    
 	================================
 
-<<<<<<< HEAD
 	fasta: ${params.fasta}
 	ends:  ${params.ends}
 	size:  ${params.size}
 	kmers: ${kmers}
-=======
-	fasta:      ${params.fasta}
-	ends:       ${params.ends}
-	kmers:      ${kmers}
-    publishDir: ${param.save_dir}
->>>>>>> 4d0b6728e68cc7b7878aa54f982da911fc0e2c14
 	Top and tailing input fasta...
 	"""
 
@@ -48,7 +38,7 @@ workflow top_tail {
     // JELLYFISH FOR KMER COUNTING ON SCAFF ENDS
     //
     jellycount ( kmer_ch )
-    jellycount.out.jf_ch.collect().view()
+    //jellycount.out.jf_ch.collect().view()
 
 
     
@@ -58,9 +48,8 @@ workflow top_tail {
     // dsl2 allows a channel to be used more than once
     jf_counts = jellycount.out.jf_ch	// get output from jfish count channel
     jellydump ( jf_counts )
-    jellydump.out.jf_final_out.collect().view()
+    //jellydump.out.jf_final_out.collect().view()
     
-<<<<<<< HEAD
     
     //
     // CONCATENATE THE COUNTS
@@ -74,8 +63,5 @@ workflow top_tail {
     results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
     
      
-=======
-    cat_all ( jellydump.out.jf_final_out.collect())
->>>>>>> 4d0b6728e68cc7b7878aa54f982da911fc0e2c14
 
 }
