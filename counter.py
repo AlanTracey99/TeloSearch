@@ -23,6 +23,6 @@ with open(sys.argv[1], 'r') as file:
             lines[kmer] = [kmer_count, 1]
 
 for k,v in lines.items():
-    if v[0]>5 and v[1]>2:
+    if v[0]>2 and v[1]>1:   #Reset to 5 and 2 after testing
         results[k]=v
         
