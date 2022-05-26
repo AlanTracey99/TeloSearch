@@ -3,6 +3,8 @@ nextflow.enable.dsl=2
 include { split_ends } from "./modules/split_ends.nf"
 include { jellycount } from "./modules/jellycount.nf"
 include { jellydump } from "./modules/jellydump.nf"
+include { cat_all } from "./modules/cat.nf"
+include { results } from "./modules/results.nf"
 
 kmers = params.klo..params.khi
 
@@ -12,7 +14,8 @@ log.info """\
 
 	fasta: ${params.fasta}
 	ends:  ${params.ends}
-	kmers:  ${kmers}
+	size:  ${params.size}
+	kmers: ${kmers}
 	Top and tailing input fasta...
 	"""
 
@@ -21,14 +24,14 @@ workflow top_tail {
     //
     // SPLIT_ENDS TO GET END OF SCAFFOLDS
     //
-    split_ends ( params.fasta, params.ends )
+    split_ends ( params.fasta, params.ends, params.size )
 
     // Comvverts [file, file, file] + [2, 4, 6] to 
     // [[2, file1], [2, file2], [2, file3], [4, file1], [4, file2]....]
 
 
     ind_scaff = split_ends.out.scaff.view()
-    ends_fa = split_ends.out.ends.view()
+    ends_fa = split_ends.out.ends_fa.view()
     kmer_ch = Channel.from(kmers).combine(ind_scaff.flatten()).view()
 
     //
@@ -57,7 +60,7 @@ workflow top_tail {
     //
     // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
     //
-    results ( cat_all.out.total_kmer_counts, split_ends.out.ends )
+    results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
     
      
 

@@ -4,13 +4,14 @@ process split_ends {
 	input:
 	path(fasta)
 	val(ends)
+	val(size)
 	
 	output:
-	path("scaff*.fa"), emit: scaff
-	path("ends.fa"), emit: ends_fa
+	path("*.fa"), emit: scaff
+	path("ends.fasta"), emit: ends_fa
 	
 	script:
     """
-    python $baseDir/split_ends.py $fasta --size $ends
+    python $baseDir/split_ends.py $fasta --size $size  --ends $ends
     """
 }

@@ -1,5 +1,4 @@
 process cat_all {
-    //publishDir "./", mode: 'move'
 
     input:
     path(x)
@@ -9,6 +8,6 @@ process cat_all {
 
     script:
     """
-    cat $x > total_kmer_counts.txt
+    cat $x >> total_kmer_counts.txt
     """
 }
