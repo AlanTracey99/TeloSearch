@@ -26,7 +26,9 @@ workflow top_tail {
     // Comvverts [file, file, file] + [2, 4, 6] to 
     // [[2, file1], [2, file2], [2, file3], [4, file1], [4, file2]....]
 
+
     ind_scaff = split_ends.out.scaff.view()
+    ends_fa = split_ends.out.ends.view()
     kmer_ch = Channel.from(kmers).combine(ind_scaff.flatten()).view()
 
     //
@@ -44,6 +46,19 @@ workflow top_tail {
     jf_counts = jellycount.out.jf_ch	// get output from jfish count channel
     jellydump ( jf_counts )
     jellydump.out.jf_final_out.collect().view()
+    
+    
+    //
+    // CONCATENATE THE COUNTS
+    //
+    
+    cat_all ( jellydump.out.jf_final_out.collect())
+    
+    //
+    // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
+    //
+    results ( cat_all.out.total_kmer_counts, split_ends.out.ends )
+    
      
 
 }

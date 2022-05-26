@@ -1,5 +1,5 @@
 process cat_all {
-    publishDir "./", mode: 'move'
+    //publishDir "./", mode: 'move'
 
     input:
     path(x)

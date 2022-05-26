@@ -11,15 +11,18 @@ and produces a dict of:
 import sys
 
 lines = {}
-with open(sys.argv[0], 'r') as file:
+results = {}
+with open(sys.argv[1], 'r') as file:
     for line in file:
         kmer = line.split(" ")[0]
         kmer_count = int(line.split(" ")[1])
         if kmer in lines.keys():
-            print(lines[kmer])
             lines[kmer][0] += kmer_count
             lines[kmer][1] += 1
         else:
             lines[kmer] = [kmer_count, 1]
 
-print(lines)
+for k,v in lines.items():
+    if v[0]>5 and v[1]>2:
+        results[k]=v
+        

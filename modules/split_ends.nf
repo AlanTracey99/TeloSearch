@@ -7,6 +7,7 @@ process split_ends {
 	
 	output:
 	path("scaff*.fa"), emit: scaff
+	path("ends.fa"), emit: ends_fa
 	
 	script:
     """
