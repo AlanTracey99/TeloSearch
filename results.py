@@ -50,7 +50,7 @@ canonical=["TTAGG","TTGGG","TTGTGG","GAGCCTTGTTT","TCAGG","TTGCA", \
 "TCTGGG","TTTGGATAGG","TTCGGG","ACTGGTGT","TTTAGGG","TGGGTC"]
 
 
-def cprop(fasta):
+def caprop(fasta):
 
 	
 	A_count=0
@@ -71,10 +71,13 @@ def cprop(fasta):
 
 	ACGT=A_count+C_count+G_count+T_count
 	C=C_count
+	A=A_count
 	cprop=(C/ACGT)*100
+	aprop=(A/ACGT)*100
+	maxprop=max([aprop,cprop])
 
 
-	return cprop
+	return maxprop
 
 
 def rev_comp(dna):
@@ -85,6 +88,8 @@ def rev_comp(dna):
 	return x[::-1].upper()
 
 def check_tandemness(candidate_kmers, fastafile):
+	#for k,v in candidate_kmers.items():
+		#print(k,v)
 
 	tandMers=[]
 	results=[]
@@ -106,9 +111,10 @@ def check_tandemness(candidate_kmers, fastafile):
 		tandMers.append(tt)
 						
 	for k,v in fastadict.items():
+		#print(k,v)
 		for tm in tandMers:
 			t=tm.split("-")
-			if cprop(t[0])>30:	#ensure telomeres are flipped towards TG composition rather than CA
+			if caprop(t[0])>30:	#ensure telomeres are flipped towards TG composition rather than CA
 				t=[rev_comp(t[0]),rev_comp(t[1])]
 			#record number of matches of tandem-mer in temp
 			#t[0]=tandem-mer
@@ -229,7 +235,7 @@ def check_tandemness(candidate_kmers, fastafile):
 			del(canonical_output[i-3:i])
 	###########						
 						
-	with open("../canonical.txt","w") as fout:
+	with open("canonical.txt","w") as fout:
 		if len(canonical_output)>0:
 			for c in canonical_output:
 				print(c)
@@ -238,7 +244,7 @@ def check_tandemness(candidate_kmers, fastafile):
 		else:
 			print("="*54+"\n")
 			print("\nNo canonical telomere motif found\n")
-	with open("../non_canonical.txt","w") as fout:
+	with open("non_canonical.txt","w") as fout:
 		if len(noncanonical_output)>1:
 			for n in noncanonical_output:
 				print(n)
@@ -252,37 +258,34 @@ def check_tandemness(candidate_kmers, fastafile):
 
 def process_counts(infile):
 
-    lines = {}
-    inter = {}
-    final = {}
-    with open(infile, 'r') as file:
-        for line in file:
-            kmer = line.split(" ")[0]
-            kmer_count = int(line.split(" ")[1])
-            if kmer in lines.keys():
-                lines[kmer][0] += kmer_count
-                lines[kmer][1] += 1
-            else:
-                lines[kmer] = [kmer_count, 1]
+	lines = {}
+	inter = {}
+	final = {}
+	with open(infile, 'r') as file:
+		for line in file:
+			kmer = line.split(" ")[0]
+			kmer_count = int(line.split(" ")[1])
+			if caprop(kmer)>30:
 
-    for k,v in lines.items():
-        if k[0]=="A" or k[0]=="C":
-            kmer=rev_comp(k)
-            inter[kmer]=v
-        else:
-            inter[k]=v
+			   kmer=rev_comp(kmer)
+			if kmer in lines.keys():
+				lines[kmer][0] += kmer_count
+				lines[kmer][1] += 1		#a kmer occuring on another line must be from another scaff
+			else:
+				lines[kmer] = [kmer_count, 1]
 
-    for k,v in inter.items():
-    #    print(k,v)
-        klen=len(k)
-        khits=v[0]
-        kends=v[1]
-        if khits >2 and kends >1:   #Need to increase these to 5 and 2 after testing
-            final[k]=v
 
-    #These are our telo candidate kmers before we check for tandem-ness
 
-    return final
+	for k,v in lines.items():
+		khits=v[0]
+		kends=v[1]
+		if khits >5 and kends >2:   #Need to increase these to 5 and 2 after testing
+			final[k]=v
+
+
+	#These are our telo candidate kmers before we check for tandem-ness
+
+	return final
 
 
 
@@ -300,4 +303,4 @@ def main():
 	print('\n\nFINISHED:\t{}'.format(end_time - start_time)+"\n\n")
 
 if __name__ == '__main__':
-    main()
+	main()
