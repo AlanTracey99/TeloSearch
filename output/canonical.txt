@@ -1,0 +1,16 @@
+LIKELY_TELO-REPEAT:	GTTAGGTTAGGTTAGGTTAGGTTAGGTTAG
+telo_kmer:		GTTAG
+GTTAG_count_at_ends:	64
+GTTAG_scaff_ends_count:	7
+telo_kmer:		GGTTA
+GGTTA_count_at_ends:	66
+GGTTA_scaff_ends_count:	7
+telo_kmer:		AGGTT
+AGGTT_count_at_ends:	66
+AGGTT_scaff_ends_count:	7
+telo_kmer:		TAGGT
+TAGGT_count_at_ends:	67
+TAGGT_scaff_ends_count:	7
+telo_kmer:		TTAGG
+TTAGG_count_at_ends:	65
+TTAGG_scaff_ends_count:	7
