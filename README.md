@@ -25,3 +25,6 @@ The below will run the small_test profile which runs default data.
 ```
 bsub -e error -o out -n 6 -q normal -M1500 -R'select[mem>1500] rusage[mem=1500] span[hosts=1]' '/software/grit/bin/nextflow_grit run main.nf -entry top_tail -c nextflow.conf -profile small_test'
 ```
+## DAG of pipeline
+
+![Flow Diagram](flow.png)
