@@ -5,6 +5,8 @@ process jira_push {
 
     script:
     """
-    python $baseDir/scripts/jira_telo_push.py $jira_id $telo_type $telo_kmer
+    if [[ ${telo_kmer} != "NULL" ]];then
+        python $baseDir/scripts/jira_telo_push.py $jira_id $telo_type $telo_kmer
+    fi
     """
 }

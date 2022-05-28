@@ -5,6 +5,11 @@ include { jellycount } from "./modules/jellycount.nf"
 include { jellydump } from "./modules/jellydump.nf"
 include { cat_all } from "./modules/cat.nf"
 include { results } from "./modules/results.nf"
+include { pull_telo } from "./modules/pull_telo.nf"
+include { find_telomere } from "./modules/find_telomere.nf"
+include { jira_push } from "./modules/jira_push.nf"
+
+
 
 kmers = params.klo..params.khi
 
@@ -26,42 +31,47 @@ workflow top_tail {
     //
     split_ends ( params.fasta, params.ends, params.size )
 
-    // Comvverts [file, file, file] + [2, 4, 6] to 
+    // Converts [file, file, file] + [2, 4, 6] to 
     // [[2, file1], [2, file2], [2, file3], [4, file1], [4, file2]....]
 
 
-    ind_scaff = split_ends.out.scaff.view()
-    ends_fa = split_ends.out.ends_fa.view()
-    kmer_ch = Channel.from(kmers).combine(ind_scaff.flatten()).view()
+    ind_scaff = split_ends.out.scaff
+    ends_fa = split_ends.out.ends_fa
+    kmer_ch = Channel.from(kmers).combine(ind_scaff.flatten())
 
     //
     // JELLYFISH FOR KMER COUNTING ON SCAFF ENDS
     //
     jellycount ( kmer_ch )
-    //jellycount.out.jf_ch.collect().view()
-
-
     
     //
     // JELLYFISH DUMP TO GET THE COUNTS
     //
     // dsl2 allows a channel to be used more than once
-    jf_counts = jellycount.out.jf_ch	// get output from jfish count channel
-    jellydump ( jf_counts )
-    //jellydump.out.jf_final_out.collect().view()
-    
+    jellydump ( jellycount.out.jf_ch )
     
     //
     // CONCATENATE THE COUNTS
     //
-    
     cat_all ( jellydump.out.jf_final_out.collect())
     
     //
     // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
     //
     results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
-    
-     
+
+    results_ch = results.out.can.concat(results.out.noncan)
+    //
+    // PULL_TELO RESULTS FROM THE CANNONICAL + NONCANNONICAL TELO FILES
+    //
+    pull_telo (results_ch)
+
+    //
+    // USE THE FIND_TELOMERE.SHELL TO OUTPUT THE NEEDED BW
+    //
+    //find_telomere ( pull_telo.out.telo_data, params.fasta, params.tolid )
+
+
+    jira_push (pull_telo.out.telo_data, params.jiraid)
 
 }
