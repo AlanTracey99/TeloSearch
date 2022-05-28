@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 LIKELY_TELO-REPEAT:	TTAGGTTAGGTTAGGTTAGGTTAGGTTAGG
 telo_kmer:		TTAGG
 TTAGG_count_at_ends:	140
@@ -14,3 +15,24 @@ AGGTT_scaff_ends_count:	8
 telo_kmer:		TAGGT
 TAGGT_count_at_ends:	155
 TAGGT_scaff_ends_count:	8
+=======
+LIKELY_TELO-REPEAT:	AGGGTTAGGGTTAGGGTTAGGGTTAGGGTT
+telo_kmer:		AGGGTT
+AGGGTT_count_at_ends:	1009
+AGGGTT_scaff_ends_count:	34
+telo_kmer:		GGGTTA
+GGGTTA_count_at_ends:	997
+GGGTTA_scaff_ends_count:	34
+telo_kmer:		GGTTAG
+GGTTAG_count_at_ends:	1005
+GGTTAG_scaff_ends_count:	34
+telo_kmer:		GTTAGG
+GTTAGG_count_at_ends:	1009
+GTTAGG_scaff_ends_count:	34
+telo_kmer:		TAGGGT
+TAGGGT_count_at_ends:	1022
+TAGGGT_scaff_ends_count:	34
+telo_kmer:		TTAGGG
+TTAGGG_count_at_ends:	1020
+TTAGGG_scaff_ends_count:	34
+>>>>>>> origin/main

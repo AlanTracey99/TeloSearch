@@ -17,11 +17,13 @@ log.info """\
 	T E L O - N F   P I P E L I N E    
 	================================
 
+    TolID: ${params.tolid}
+    JiraID: ${params.jiraid}
 	fasta: ${params.fasta}
 	ends:  ${params.ends}
 	size:  ${params.size}
 	kmers: ${kmers}
-	Top and tailing input fasta...
+	Pull out putative telomeric sequence for further analysis.
 	"""
 
 workflow top_tail {
@@ -59,19 +61,21 @@ workflow top_tail {
     // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
     //
     results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
-
     results_ch = results.out.can.concat(results.out.noncan)
+
     //
     // PULL_TELO RESULTS FROM THE CANNONICAL + NONCANNONICAL TELO FILES
     //
     pull_telo (results_ch)
 
     //
-    // USE THE FIND_TELOMERE.SHELL TO OUTPUT THE NEEDED BW
+    // USE THE FIND_TELOMERE.SHELL TO OUTPUT THE NEEDED .WINDOWS FILE
     //
     //find_telomere ( pull_telo.out.telo_data, params.fasta, params.tolid )
 
-
+    //
+    // JIRA_PUSH ENTERS THE RESULTS OF PULL_TELO INTO ASSOCIATED JIRA TICKET
+    //
     jira_push (pull_telo.out.telo_data, params.jiraid)
 
 }
