@@ -6,7 +6,7 @@ import sys
 def dotloader():
     load_dotenv(".env")
     jira_user = os.getenv('JIRA_USER')
-    jira_pass = os.getenv('JIRA_PASS')
+    jira_pass = os.getenv('JIRA_PASSWORD')
     return jira_user, jira_pass
 
 def main():
