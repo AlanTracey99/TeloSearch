@@ -12,6 +12,6 @@ process split_ends {
 	
 	script:
     """
-    python $baseDir/split_ends.py $fasta --size $size  --ends $ends
+    python $baseDir/scripts/split_ends.py $fasta --size $size  --ends $ends
     """
 }
