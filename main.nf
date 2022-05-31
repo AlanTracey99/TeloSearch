@@ -58,7 +58,7 @@ workflow top_tail {
     //
     // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
     //
-    results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
+    results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa, params.tolid )
     results_ch = results.out.can.concat(results.out.noncan)
     results_ch.view()
 
