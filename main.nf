@@ -35,8 +35,6 @@ workflow top_tail {
 
     // Converts [file, file, file] + [2, 4, 6] to 
     // [[2, file1], [2, file2], [2, file3], [4, file1], [4, file2]....]
-
-
     ind_scaff = split_ends.out.scaff
     ends_fa = split_ends.out.ends_fa
     kmer_ch = Channel.from(kmers).combine(ind_scaff.flatten())
@@ -55,13 +53,14 @@ workflow top_tail {
     //
     // CONCATENATE THE COUNTS
     //
-    cat_all ( jellydump.out.jf_final_out.collect())
+    cat_all ( jellydump.out.jf_final_out.collect(), params.tolid)
     
     //
     // PYTHON RESULTS_INTER.PY TO GET TELOMERE MOTIF
     //
     results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa )
     results_ch = results.out.can.concat(results.out.noncan)
+    results_ch.view()
 
     //
     // PULL_TELO RESULTS FROM THE CANNONICAL + NONCANNONICAL TELO FILES
@@ -76,6 +75,6 @@ workflow top_tail {
     //
     // JIRA_PUSH ENTERS THE RESULTS OF PULL_TELO INTO ASSOCIATED JIRA TICKET
     //
-    jira_push (pull_telo.out.telo_data, params.jiraid)
+    jira_push (pull_telo.out.telo_data, params.jiraid, params.python_env)
 
 }
