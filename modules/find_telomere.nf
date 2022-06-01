@@ -12,6 +12,6 @@ process find_telomere {
     script:
     """
     telo_kmer=`cat $telomere | tr -d '!& '`
-    $baseDir/scripts/find_telomere.sh $fasta \$telo_kmer $id_\$telo_kmer
+    $baseDir/scripts/find_telomere.sh $fasta \$telo_kmer ./
     """
 }

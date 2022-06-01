@@ -22,8 +22,8 @@ file=$file_name
 prefix=`echo $file | sed 's/.fasta$//g' | sed 's/.fa$//g'`
 
 
-/nfs/team135/yy5/vgptools/vgp-assembly/pipeline/telomere/find_telomere $file $telomereSeq > $out_dir/$prefix.telomere
-/usr/bin/java -Xms1g -Xmx1g -cp $VGP_PIPELINE/telomere/telomere.jar FindTelomereWindows $out_dir/$prefix.telomere 99.9 > $out_dir/$prefix.windows
-cat $out_dir/$prefix.windows |awk '{if ($4 > 100000 && $3-$5 > 100000) print $0}'
+/nfs/team135/yy5/vgptools/vgp-assembly/pipeline/telomere/find_telomere $file $telomereSeq > $out_dir/$prefix-$telomereSeq.telomere
+/usr/bin/java -Xms1g -Xmx1g -cp $VGP_PIPELINE/telomere/telomere.jar FindTelomereWindows $out_dir/$prefix-$telomereSeq.telomere 99.9 > $out_dir/$prefix-$telomereSeq.windows
+cat $out_dir/$prefix-$telomereSeq.windows |awk '{if ($4 > 100000 && $3-$5 > 100000) print $0}'
 
 

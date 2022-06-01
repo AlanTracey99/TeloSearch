@@ -8,7 +8,7 @@ include { results } from "./modules/results.nf"
 include { parse_results } from "./modules/parse_results.nf"
 include { cat_results } from "./modules/cat_results.nf"
 include { find_telomere } from "./modules/find_telomere.nf"
-// include { jira_push } from "./modules/jira_push.nf"
+include { jira_push } from "./modules/jira_push.nf"
 
 
 
@@ -80,6 +80,6 @@ workflow top_tail {
     //
     // JIRA_PUSH ENTERS THE RESULTS OF PULL_TELO INTO ASSOCIATED JIRA TICKET
     //
-    //jira_push (cat_results.out.cat_results, params.jiraid, params.python_env)
+    jira_push (cat_results.out.cat_results, params.jiraid, params.python_env)
 
 }
