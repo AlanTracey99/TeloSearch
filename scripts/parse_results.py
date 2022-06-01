@@ -50,18 +50,10 @@ def main():
     Desc: Main logic control
     Returns: Final string for jira push
     """
-    kmer_type = ''
 
     tolid = sys.argv[2]
     file_name = os.path.basename(sys.argv[1])
     base_name = os.path.splitext(file_name)[0]
-    print(base_name)
-    if base_name.startswith('can'):
-        kmer_type = '!'
-    elif base_name.startswith('non'):
-        kmer_type = '?'
-    else:
-        kmer_type = "~"
 
     list_of_T, counts_of_T = file_parse(sys.argv[1])
     kmer_list = check_lists(list_of_T, counts_of_T)
@@ -69,7 +61,15 @@ def main():
         kmer_list.append('!')
 
     kmer_string = ','.join(kmer_list)
-    kmer_data = f'{kmer_type} - {kmer_string}'
+
+    if base_name.startswith('can'):
+        modified_string = kmer_string.upper()
+    elif base_name.startswith('non'):
+        modified_string = kmer_string.lower()
+    else:
+        modified_string = "~"
+
+    kmer_data = f'{modified_string}'
     file_new(base_name, tolid, kmer_data)
 
 

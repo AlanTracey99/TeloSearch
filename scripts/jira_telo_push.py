@@ -3,11 +3,13 @@ from dotenv import load_dotenv
 import os
 import sys
 
+
 def dotloader():
     load_dotenv(sys.argv[3])
     jira_user = os.getenv('JIRA_USER')
     jira_pass = os.getenv('JIRA_PASSWORD')
     return jira_user, jira_pass
+
 
 def set_proxy_environs():
     prox = str("http://wwwcache.sanger.ac.uk:3128")
@@ -15,7 +17,7 @@ def set_proxy_environs():
     os.environ['HTTP_PROXY'] = prox
     os.environ['https_proxy'] = prox
     os.environ['http_proxy'] = prox
-    
+
 
 def get_contents(file):
     """
@@ -29,18 +31,23 @@ def get_contents(file):
         for line in infile:
             contents = line
     
-    if contents.split(' & ')[0] == "? - !":
-        contents = contents.split(' & ')[1]
-    elif contents.split(' & ')[0] == "? - !" and contents.split(' & ')[1] == "! - !":
-        contents = '!!!'
-    elif contents.contains(' & '):
-        contents.split(' & ')
-        contents = f'{contents[1]} & {contents[0]}'
-    else:
-        # Escape for string with only cannonical
-        pass
+    up_check = 0
+    if ' & ' in contents:
+        for i in contents.split(' & '):
+            if i == '!' or i.islower():
+                non_con = i
+            elif i == '!' or i.isupper():
+                con = i
+            else:
+                con, non_con = '!!!', '!!!'
+
+    if len(con) > 1:
+        contents = con
+    elif len(con) < 1 and len(non_con) > 1:
+        contents = non_con
 
     return contents
+
 
 def get_length(motif):
     """
@@ -52,9 +59,8 @@ def get_length(motif):
     if motif == '!!!':
         motif_value = 0
     else:
-        motif_value = len(motif.split(' - ')[1])
+        motif_value = len(motif)
     return int(motif_value)
-    
 
 
 def main():
@@ -77,7 +83,6 @@ def main():
                             }
                     )
 
-    print( motif_value, motif_length)
 
 if __name__ == "__main__":
     main()
