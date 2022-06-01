@@ -5,7 +5,7 @@ include { jellycount } from "./modules/jellycount.nf"
 include { jellydump } from "./modules/jellydump.nf"
 include { cat_all } from "./modules/cat.nf"
 include { results } from "./modules/results.nf"
-include { pull_telo } from "./modules/pull_telo.nf"
+include { parse_results } from "./modules/parse_results.nf"
 include { find_telomere } from "./modules/find_telomere.nf"
 include { jira_push } from "./modules/jira_push.nf"
 
@@ -60,12 +60,10 @@ workflow top_tail {
     //
     results ( cat_all.out.total_kmer_counts, split_ends.out.ends_fa, params.tolid )
     results_ch = results.out.can.concat(results.out.noncan)
-    results_ch.view()
-
     //
-    // PULL_TELO RESULTS FROM THE CANNONICAL + NONCANNONICAL TELO FILES
+    // PARSE RESULTS, CONVERT RESULTS INTO FORMAT FOR JIRA_PUSH
     //
-    pull_telo (results_ch)
+    parse_results ( results_ch, params.tolid )
 
     //
     // USE THE FIND_TELOMERE.SHELL TO OUTPUT THE NEEDED .WINDOWS FILE
@@ -75,6 +73,7 @@ workflow top_tail {
     //
     // JIRA_PUSH ENTERS THE RESULTS OF PULL_TELO INTO ASSOCIATED JIRA TICKET
     //
-    jira_push (pull_telo.out.telo_data, params.jiraid, params.python_env)
+    parsed_ch = parse_results.out.parsed.collect()
+    jira_push (parsed_ch, params.jiraid, params.python_env)
 
 }
