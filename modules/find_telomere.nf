@@ -1,21 +1,17 @@
 process find_telomere {
-    publishDir "./output", mode: 'copy', overwrite: true
+    publishDir "./output/$id", mode: 'copy', overwrite: true
 
     input:
-    tuple val( telo_type ), val( telo_kmer )
+    path(telomere)
     path(fasta)
-    val( species_id )
+    val( id )
 
     output:
-    tuple path("*telomere"), path("*windows"), emit: windows_telo
+    tuple path("$id*.telomere"), path("$id*.windows"), emit: windows_telo
 
     script:
     """
-    if [[ ${telo_kmer} = "NULL" ]];then
-        echo "NULL" > NULL.telomere
-        echo "NULL" > NULL.windows
-    else
-        $baseDir/scripts/find_telomere.sh $fasta $telo_kmer . $telo_type $species_id
-    fi
+    telo_kmer=`cat $telomere | tr -d '!& '`
+    $baseDir/scripts/find_telomere.sh $fasta \$telo_kmer ./
     """
 }
